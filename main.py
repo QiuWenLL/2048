@@ -41,8 +41,10 @@ def main():
         # 检查游戏状态
         if game.has_won():
             display.show_message("You Win!")
+            game.save_score()  # 保存胜利时的分数
         elif game.is_game_over():
             display.show_message("Game Over!")
+            game.save_score()  # 保存游戏结束时的分数
         
         pygame.display.flip()
     
