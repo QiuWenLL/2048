@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>2048游戏分数记录</title>
     <style>
@@ -7,23 +8,41 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
         table {
             border-collapse: collapse;
             width: 100%;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        
+        .board-cell {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 2px;
+            background-color: #eee4da;
+            border-radius: 3px;
+            font-weight: bold;
+        }
     </style>
 </head>
+
 <body>
     <h1>2048游戏分数记录</h1>
     <table>
@@ -34,19 +53,55 @@
                 <th>最终棋盘</th>
             </tr>
         </thead>
-        <tbody>
-            {% for score in scores %}
-            <tr>
-                <td>{{ score.date }}</td>
-                <td>{{ score.score }}</td>
-                <td>
-                    {% for row in score.board %}
-                        {{ row }}<br>
-                    {% endfor %}
-                </td>
-            </tr>
-            {% endfor %}
+        <tbody id="scores-table">
         </tbody>
     </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/scores')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('scores-table');
+                    
+                    data.forEach(score => {
+                        const row = document.createElement('tr');
+                        
+                        // 日期单元格
+                        const dateCell = document.createElement('td');
+                        dateCell.textContent = new Date(score.timestamp).toLocaleString();
+                        row.appendChild(dateCell);
+                        
+                        // 分数单元格
+                        const scoreCell = document.createElement('td');
+                        scoreCell.textContent = score.score;
+                        row.appendChild(scoreCell);
+                        
+                        // 棋盘单元格
+                        const boardCell = document.createElement('td');
+                        const boardDiv = document.createElement('div');
+                        
+                        // 创建4x4棋盘显示
+                        for (let i = 0; i < 4; i++) {
+                            for (let j = 0; j < 4; j++) {
+                                const cell = document.createElement('div');
+                                cell.className = 'board-cell';
+                                const value = score.board[i][j];
+                                cell.textContent = value === 0 ? '' : value;
+                                boardDiv.appendChild(cell);
+                            }
+                            boardDiv.appendChild(document.createElement('br'));
+                        }
+                        
+                        boardCell.appendChild(boardDiv);
+                        row.appendChild(boardCell);
+                        
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
+
 </html>

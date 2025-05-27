@@ -39,17 +39,19 @@ def main():
         display.draw_board()
         
         # 检查游戏状态
-        has_saved = False
+        if not hasattr(game, 'has_saved'):
+            game.has_saved = False
+            
         if game.has_won():
             display.show_message("You Win!")
-            if not has_saved:
+            if not game.has_saved:
                 game.save_score()  # 保存胜利时的分数
-                has_saved = True
+                game.has_saved = True
         elif game.is_game_over():
             display.show_message("Game Over!")
-            if not has_saved:
+            if not game.has_saved:
                 game.save_score()  # 保存游戏结束时的分数
-                has_saved = True
+                game.has_saved = True
         
         pygame.display.flip()
     
