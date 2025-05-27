@@ -14,4 +14,4 @@ def show_scores():
     return render_template('scores.html', scores=scores_data["scores"])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
