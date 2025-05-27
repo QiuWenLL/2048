@@ -1,4 +1,6 @@
 import random
+import json
+from datetime import datetime
 
 class Game2048:
     def __init__(self):
@@ -104,8 +106,28 @@ class Game2048:
                 if i < 3 and self.board[i][j] == self.board[i+1][j]:
                     return False
         
+        # 游戏结束时保存分数
+        self.save_score()
         return True
     
     def has_won(self):
         """检查是否达到2048获胜条件"""
         return any(num >= 2048 for row in self.board for num in row)
+        
+    def save_score(self):
+        """保存当前分数到scores.json文件"""
+        try:
+            with open('scores.json', 'r') as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            data = {"scores": []}
+            
+        score_record = {
+            "score": self.score,
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "board": self.board
+        }
+        data["scores"].append(score_record)
+        
+        with open('scores.json', 'w') as f:
+            json.dump(data, f, indent=2)
