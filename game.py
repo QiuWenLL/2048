@@ -106,8 +106,6 @@ class Game2048:
                 if i < 3 and self.board[i][j] == self.board[i+1][j]:
                     return False
         
-        # 游戏结束时保存分数
-        self.save_score()
         return True
     
     def has_won(self):
@@ -116,6 +114,12 @@ class Game2048:
         
     def save_score(self):
         """保存当前分数到scores.json文件"""
+        print(f"尝试保存分数: {self.score}")  # 调试输出
+        
+        if self.score <= 0:  # 不保存0分
+            print("分数为0，不保存")
+            return
+            
         try:
             with open('scores.json', 'r') as f:
                 data = json.load(f)
@@ -129,5 +133,9 @@ class Game2048:
         }
         data["scores"].append(score_record)
         
-        with open('scores.json', 'w') as f:
-            json.dump(data, f, indent=2)
+        try:
+            with open('scores.json', 'w') as f:
+                json.dump(data, f, indent=2)
+            print(f"成功保存分数: {score_record}")  # 调试输出
+        except Exception as e:
+            print(f"保存分数出错: {e}")  # 调试输出
