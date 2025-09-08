@@ -10,7 +10,8 @@ def get_scores():
     if os.path.exists('scores.json'):
         with open('scores.json', 'r', encoding='utf-8') as f:
             try:
-                scores = json.load(f)
+                data = json.load(f)
+                scores = data.get('scores', []) if isinstance(data, dict) else data
             except json.JSONDecodeError:
                 scores = []
     else:

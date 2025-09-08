@@ -50,6 +50,7 @@
             <tr>
                 <th>日期</th>
                 <th>分数</th>
+                <th>星级</th>
                 <th>最终棋盘</th>
             </tr>
         </thead>
@@ -69,13 +70,22 @@
                         
                         // 日期单元格
                         const dateCell = document.createElement('td');
-                        dateCell.textContent = new Date(score.timestamp).toLocaleString();
+                        dateCell.textContent = score.date || new Date(score.timestamp).toLocaleString();
                         row.appendChild(dateCell);
                         
                         // 分数单元格
                         const scoreCell = document.createElement('td');
                         scoreCell.textContent = score.score;
                         row.appendChild(scoreCell);
+                        
+                        // 星级单元格
+                        const starsCell = document.createElement('td');
+                        const stars = score.stars || 1;
+                        const starsDisplay = "★".repeat(stars) + "☆".repeat(5 - stars);
+                        starsCell.innerHTML = `${starsDisplay} (${stars}/5)`;
+                        starsCell.style.color = "#DAA520";
+                        starsCell.style.fontWeight = "bold";
+                        row.appendChild(starsCell);
                         
                         // 棋盘单元格
                         const boardCell = document.createElement('td');

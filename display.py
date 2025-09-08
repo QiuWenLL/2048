@@ -101,9 +101,15 @@ class GameDisplay:
                     )
                     self.screen.blit(text, text_rect)
         
-        # 绘制分数
+        # 绘制分数和星级
         score_text = self.small_font.render(f"Score: {self.game.score}", True, (119, 110, 101))
         self.screen.blit(score_text, (CELL_PADDING, WINDOW_HEIGHT - 40))
+        
+        # 绘制星级评定
+        stars = self.game.calculate_stars()
+        stars_text = "★" * stars + "☆" * (5 - stars)  # 使用实心星和空心星
+        stars_display = self.small_font.render(f"Stars: {stars_text} ({stars}/5)", True, (218, 165, 32))
+        self.screen.blit(stars_display, (CELL_PADDING, WINDOW_HEIGHT - 20))
     
     def show_message(self, message):
         """显示游戏结束或胜利消息"""
