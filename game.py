@@ -111,6 +111,19 @@ class Game2048:
     def has_won(self):
         """检查是否达到2048获胜条件"""
         return any(num >= 2048 for row in self.board for num in row)
+    
+    def calculate_stars(self):
+        """根据分数计算星级评定 (1-5星)"""
+        if self.score >= 50000:
+            return 5
+        elif self.score >= 20000:
+            return 4
+        elif self.score >= 5000:
+            return 3
+        elif self.score >= 1000:
+            return 2
+        else:
+            return 1
         
     def save_score(self):
         """保存当前分数到scores.json文件"""
@@ -125,9 +138,11 @@ class Game2048:
                 data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             data = {"scores": []}
-            
+        
+        stars = self.calculate_stars()
         score_record = {
             "score": self.score,
+            "stars": stars,
             "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "board": self.board
         }
